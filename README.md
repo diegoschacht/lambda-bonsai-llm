@@ -5,27 +5,27 @@ Run a real LLM ([Bonsai 1.7B](https://huggingface.co/onnx-community/Bonsai-1.7B-
 ## Architecture
 
 ```
-                    ┌─────────────────────────────────────────────┐
-                    │              AWS Lambda (Node.js 20)        │
-                    │  ┌──────────┐  ┌─────────────────────────┐  │
- HTTP POST          │  │ handler  │→ │ inference.js             │  │
-─────────────┐      │  │          │  │  Transformers.js v4      │  │
-             │      │  └──────────┘  │  + ONNX Runtime 1.24     │  │
- Function URL│─────→│               │  (text-generation pipeline)│ │
- or API GW   │      │               └─────────────────────────┘  │
-─────────────┘      │                         ↑                   │
-                    │               ┌─────────┴──────────┐        │
-                    │               │  model-loader.js    │        │
-                    │               │  S3 → /tmp (cached) │        │
-                    │               └─────────┬──────────┘        │
-                    └─────────────────────────┼───────────────────┘
-                                              │
-                                    ┌─────────▼──────────┐
-                                    │     S3 Bucket       │
-                                    │  bonsai-1.7b-onnx/  │
-                                    │  q4 model (~1.1GB)   │
-                                    │  + tokenizer files   │
-                                    └─────────────────────┘
+                         +------------------------------------------+
+                         |          AWS Lambda (Node.js 20)          |
+                         |                                          |
+  HTTP POST              |  +----------+    +--------------------+  |
+  --------+              |  |          |    |  inference.js      |  |
+          |              |  | handler  |--->|  Transformers.js   |  |
+  Function URL --------->|  |          |    |  + ONNX Runtime    |  |
+  or API GW              |  +----------+    +--------------------+  |
+  --------+              |                          |               |
+                         |               +----------+----------+    |
+                         |               |  model-loader.js    |    |
+                         |               |  S3 -> /tmp (cached)|    |
+                         |               +----------+----------+    |
+                         +--------------------------|---------------+
+                                                    |
+                                          +---------v----------+
+                                          |     S3 Bucket      |
+                                          |  bonsai-1.7b-onnx/ |
+                                          |  q4 model (~1.1GB) |
+                                          |  + tokenizer files  |
+                                          +--------------------+
 ```
 
 ### How it works
