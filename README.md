@@ -127,7 +127,7 @@ Edit `serverless.yml` to tune:
 
 | Setting | Current | Description |
 |---------|---------|-------------|
-| `memorySize` | 3008 MB | Lambda memory (max on this account tier) |
+| `memorySize` | 3008 MB | Lambda memory |
 | `timeout` | 300s | Max execution time (5 minutes) |
 | `ephemeralStorageSize` | 2048 MB | `/tmp` storage for model files |
 | `modelBucket` | `lambda-bonsai-llm-models` | S3 bucket name |
