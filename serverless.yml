@@ -1,0 +1,48 @@
+service: lambda-bonsai-llm
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-central-1
+  environment:
+    MODEL_BUCKET: ${self:custom.modelBucket}
+    MODEL_PREFIX: ${self:custom.modelPrefix}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${self:custom.modelBucket}
+            - arn:aws:s3:::${self:custom.modelBucket}/*
+
+custom:
+  modelBucket: lambda-bonsai-llm-models
+  modelPrefix: bonsai-1.7b-onnx
+
+functions:
+  inference:
+    handler: src/handler.handler
+    timeout: 300
+    memorySize: 3008
+    ephemeralStorageSize: 2048
+    url: true
+    events:
+      - httpApi:
+          path: /inference
+          method: post
+
+package:
+  patterns:
+    - '!node_modules/onnxruntime-web/**'
+    - '!node_modules/onnxruntime-node/bin/**/darwin/**'
+    - '!node_modules/onnxruntime-node/bin/**/win32/**'
+    - '!node_modules/onnxruntime-node/bin/**/arm64/**'
+    - '!node_modules/@img/sharp-darwin*/**'
+    - '!node_modules/@img/sharp-libvips-darwin*/**'
+    - '!node_modules/@img/sharp-linuxmusl*/**'
+    - '!node_modules/@img/sharp-libvips-linuxmusl*/**'
+    - '!scripts/**'
+    - '!README.md'
