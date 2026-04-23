@@ -6,7 +6,7 @@ Run a real LLM ([Bonsai 1.7B](https://huggingface.co/onnx-community/Bonsai-1.7B-
 
 ```
                          +------------------------------------------+
-                         |          AWS Lambda (Node.js 20)          |
+                         |          AWS Lambda (Node.js 20)         |
                          |                                          |
   HTTP POST              |  +----------+    +--------------------+  |
   --------+              |  |          |    |  inference.js      |  |
@@ -24,7 +24,7 @@ Run a real LLM ([Bonsai 1.7B](https://huggingface.co/onnx-community/Bonsai-1.7B-
                                           |     S3 Bucket      |
                                           |  bonsai-1.7b-onnx/ |
                                           |  q4 model (~1.1GB) |
-                                          |  + tokenizer files  |
+                                          |  + tokenizer files |
                                           +--------------------+
 ```
 
